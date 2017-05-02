@@ -23,3 +23,18 @@ This application provides following functionalities:
 - New Training : Which allows the user to retrain the NN model. User can change the model architecture or add/remove new gestures. This app has inbuilt options to allow the user to create new image samples of user defined gestures if required.
 - Visualization : Which allows the user to see feature maps of different NN layers for a given input gesture image. Interesting to see how NN works and learns things.
 
+# Demo 
+Youtube link - https://www.youtube.com/watch?v=CMs5cn65YK8
+
+![](https://j.gifs.com/X6zwYm.gif)
+
+
+# ToDo
+Add more details of the implementation. Add some references as well.
+
+# Conclusion
+So where to go from here? Well I thought of testing out the responsiveness of NN predictions and games are good benchmark. On MAC I dont have any games installed but then this Chrome Browser Dino Jump game came handy. So I bound the 'Punch' gesture with jump action of the Dino character. Basically can work with any other gesture but felt Punch gesture is easy. Stop gesture was another candidate.
+Well here is how it turned out :)
+YouTube link - https://www.youtube.com/watch?v=lnFPvtCSsLA&t=49s
+
+![](https://j.gifs.com/58pxVx.gif)
