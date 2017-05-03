@@ -152,7 +152,7 @@ I have trained the model for 15 epochs.
 
 
 # Visualization
-In order to understand how the neural net is understanding the different gesture input its possible to visualize the layer feature map contents.
+CNN is good in detecting edges and thats why its useful for image classificaion kind of problems. In order to understand how the neural net is understanding the different gesture input its possible to visualize the layer feature map contents.
 
 After launching the main script choose option 3 for visualizing different or all layer for a given image (currently it takes images from ./imgs, so change it accordingly)
 ```
@@ -190,9 +190,10 @@ get_activations = K.function([model.layers[0].input, K.learning_phase()], [layer
 activations = get_activations([input_image, 0])[0]
 output_image = activations
 ```
-
+Layer 4 visualization for PUNCH gesture
 ![Layer 4 visualization for PUNCH gesture](https://github.com/asingh33/CNNGestureRecognizer/blob/master/img_4_layer4_MaxPooling2D.png)
 
+Layer 2 visualization for STOP gesture
 ![Layer 2 visualization for STOP gesture](https://github.com/asingh33/CNNGestureRecognizer/blob/master/img_7_layer2_Conv2D.png)
 
 
