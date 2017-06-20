@@ -14,7 +14,7 @@ Suggestion: Better to download Anaconda as it will take care of most of the othe
 # Repo contents
 - **trackgesture.py** : The main script launcher. This file contains all the code for UI options and OpenCV code to capture camera contents. This script internally calls interfaces to gestureCNN.py.
 - **gestureCNN.py** : This script file holds all the CNN specific code to create CNN model, load the weight file (if model is pretrained), train the model using image samples present in **./imgfolder_b**, visualize the feature maps at different layers of NN (of pretrained model) for a given input image present in **./imgs** folder.
-- **imgfolder_b** : This folder contains all the 4015 gesture images I took in order to train the model. Only reason I had to provide instead of weight file is GitHub's restriction for >100 MB file upload. **So in case you are trying to download/pull my repo then you must first train the model either using this imgfolder_b contents or your own.**
+- **imgfolder_b** : This folder contains all the 4015 gesture images I took in order to train the model.
 - **_imgs_** - This is an optional folder of few sample images that one can use to visualize the feature maps at different layers. These are few sample images from imgfolder_b only.
 - **_ori_4015imgs_acc.png_** : This is just a pic of a plot depicting model accuracy Vs validation data accuracy after I trained it.
 - **_ori_4015imgs_loss.png_** : This is just a pic of a plot depicting model loss Vs validation loss after I training.
