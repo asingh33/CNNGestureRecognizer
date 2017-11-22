@@ -1,3 +1,4 @@
+[![DOI](https://zenodo.org/badge/89872749.svg)](https://zenodo.org/badge/latestdoi/89872749)
 # CNNGestureRecognizer
 Gesture recognition via CNN neural network implemented in Keras + Theano + OpenCV
 
