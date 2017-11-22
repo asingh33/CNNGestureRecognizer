@@ -1,4 +1,4 @@
-# CNNGestureRecognizer ver 2.0
+# CNNGestureRecognizer
 Gesture recognition via CNN neural network implemented in Keras + Theano + OpenCV
 
 
