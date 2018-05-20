@@ -244,7 +244,7 @@ def initializers():
     
     # create matrix to store all flattened images
     immatrix = np.array([np.array(Image.open(path2+ '/' + images).convert('L')).flatten()
-                         for images in imlist], dtype = 'f')
+                         for images in sorted(imlist)], dtype = 'f')
     
 
     
