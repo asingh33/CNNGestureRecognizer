@@ -170,7 +170,7 @@ def loadCNN(wf_index):
     if wf_index >= 0:
         #Load pretrained weights
         fname = WeightFileName[int(wf_index)]
-        print "loading ", fname
+        print("loading ", fname)
         model.load_weights(fname)
     
     layer = model.layers[11]
@@ -214,7 +214,7 @@ def guessGesture(model, img):
     # Get the output with maximum probability
     import operator
     
-    guess = max(d.iteritems(), key=operator.itemgetter(1))[0]
+    guess = max(d.items(), key=operator.itemgetter(1))[0]
     prob  = d[guess]
 
     if prob > 70.0:
@@ -248,9 +248,9 @@ def initializers():
     
 
     
-    print immatrix.shape
+    print(immatrix.shape)
     
-    raw_input("Press any key")
+    input("Press any key")
     
     #########################################################
     ## Label the set of images per respective gesture type.
@@ -258,7 +258,7 @@ def initializers():
     label=np.ones((total_images,),dtype = int)
     
     samples_per_class = total_images / nb_classes
-    print "samples_per_class - ",samples_per_class
+    print("samples_per_class - ",samples_per_class)
     s = 0
     r = samples_per_class
     for classIndex in range(nb_classes):
@@ -312,9 +312,9 @@ def trainModel(model):
 
     visualizeHis(hist)
 
-    ans = raw_input("Do you want to save the trained weights - y/n ?")
+    ans = input("Do you want to save the trained weights - y/n ?")
     if ans == 'y':
-        filename = raw_input("Enter file name - ")
+        filename = input("Enter file name - ")
         fname = path + str(filename) + ".hdf5"
         model.save_weights(fname,overwrite=True)
     else:
@@ -394,7 +394,7 @@ def visualizeLayers(model, img, layerIndex):
         visualizeLayer(model,img,input_image, layerIndex)
     else:
         tlayers = len(model.layers[:])
-        print "Total layers - {}".format(tlayers)
+        print("Total layers - {}".format(tlayers))
         for i in range(1,tlayers):
              visualizeLayer(model,img, input_image,i)
 
@@ -414,7 +414,7 @@ def visualizeLayer(model, img, input_image, layerIndex):
         o1 = np.rollaxis(output_image, 3, 1)
         output_image = np.rollaxis(o1, 3, 1)
         
-        print "Dumping filter data of layer{} - {}".format(layerIndex,layer.__class__.__name__)
+        print("Dumping filter data of layer{} - {}".format(layerIndex,layer.__class__.__name__))
         filters = len(output_image[0,0,0,:])
         
         fig=plt.figure(figsize=(8,8))
@@ -432,6 +432,6 @@ def visualizeLayer(model, img, input_image, layerIndex):
         fig.savefig("img_" + str(img) + "_layer" + str(layerIndex)+"_"+layer.__class__.__name__+".png")
         #plt.close(fig)
     else:
-        print "Can't dump data of this layer{}- {}".format(layerIndex, layer.__class__.__name__)
+        print("Can't dump data of this layer{}- {}".format(layerIndex, layer.__class__.__name__))
 
 

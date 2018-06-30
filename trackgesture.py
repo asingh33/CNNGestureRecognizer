@@ -96,11 +96,11 @@ def skinMask(frame, x0, y0, width, height ):
         retgesture = myNN.guessGesture(mod, res)
         if lastgesture != retgesture :
             lastgesture = retgesture
-            print myNN.output[lastgesture]
-            time.sleep(0.01 )
+            print(myNN.output[lastgesture])
+            time.sleep(0.01)
             #guessGesture = False
     elif visualize == True:
-        layer = int(raw_input("Enter which layer to visualize "))
+        layer = int(input("Enter which layer to visualize "))
         cv2.waitKey(0)
         myNN.visualizeLayers(mod, res, layer)
         visualize = False
@@ -139,12 +139,12 @@ def binaryMask(frame, x0, y0, width, height ):
                 jump = ''' osascript -e 'tell application "System Events" to key code 49' '''
                 #jump = ''' osascript -e 'tell application "System Events" to key down (49)' '''
                 os.system(jump)
-                print myNN.output[lastgesture] + "= Dino JUMP!"
+                print(myNN.output[lastgesture] + "= Dino JUMP!")
 
             #time.sleep(0.01 )
             #guessGesture = False
     elif visualize == True:
-        layer = int(raw_input("Enter which layer to visualize "))
+        layer = int(input("Enter which layer to visualize "))
         cv2.waitKey(1)
         myNN.visualizeLayers(mod, res, layer)
         visualize = False
@@ -164,31 +164,31 @@ def Main():
     
     #Call CNN model loading callback
     while True:
-        ans = int(raw_input( banner))
+        ans = int(input( banner))
         if ans == 2:
             mod = myNN.loadCNN(-1)
             myNN.trainModel(mod)
-            raw_input("Press any key to continue")
+            input("Press any key to continue")
             break
         elif ans == 1:
-            print "Will load default weight file"
+            print("Will load default weight file")
             mod = myNN.loadCNN(0)
             break
         elif ans == 3:
             if not mod:
-                w = int(raw_input("Which weight file to load (0 or 1)"))
+                w = int(input("Which weight file to load (0 or 1)"))
                 mod = myNN.loadCNN(w)
             else:
-                print "Will load default weight file"
+                print("Will load default weight file")
             
-            img = int(raw_input("Image number "))
-            layer = int(raw_input("Enter which layer to visualize "))
+            img = int(input("Image number "))
+            layer = int(input("Enter which layer to visualize "))
             myNN.visualizeLayers(mod, img, layer)
-            raw_input("Press any key to continue")
+            input("Press any key to continue")
             continue
         
         else:
-            print "Get out of here!!!"
+            print("Get out of here!!!")
             return 0
         
     ## Grab camera input
@@ -236,14 +236,14 @@ def Main():
         elif key == ord('b'):
             binaryMode = not binaryMode
             if binaryMode:
-                print "Binary Threshold filter active"
+                print("Binary Threshold filter active")
             else:
-                print "SkinMask filter active"
+                print("SkinMask filter active")
         
         ## Use g key to start gesture predictions via CNN
         elif key == ord('g'):
             guessGesture = not guessGesture
-            print "Prediction Mode - {}".format(guessGesture)
+            print("Prediction Mode - {}".format(guessGesture))
         
         ## This option is not yet complete. So disabled for now
         ## Use v key to visualize layers
@@ -263,7 +263,7 @@ def Main():
         ## Quiet mode to hide gesture window
         elif key == ord('q'):
             quietMode = not quietMode
-            print "Quiet Mode - {}".format(quietMode)
+            print("Quiet Mode - {}".format(quietMode))
 
         ## Use s key to start/pause/resume taking snapshots
         ## numOfSamples controls number of snapshots to be taken PER gesture
@@ -273,18 +273,18 @@ def Main():
             if gestname != '':
                 saveImg = True
             else:
-                print "Enter a gesture group name first, by pressing 'n'"
+                print("Enter a gesture group name first, by pressing 'n'")
                 saveImg = False
         
         ## Use n key to enter gesture name
         elif key == ord('n'):
-            gestname = raw_input("Enter the gesture folder name: ")
+            gestname = input("Enter the gesture folder name: ")
             try:
                 os.makedirs(gestname)
             except OSError as e:
                 # if directory already present
                 if e.errno != 17:
-                    print 'Some issue while creating the directory named -' + gestname
+                    print('Some issue while creating the directory named -' + gestname)
             
             path = "./"+gestname+"/"
         
