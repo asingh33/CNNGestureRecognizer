@@ -12,14 +12,26 @@ from keras.layers import Conv2D, MaxPooling2D, ZeroPadding2D
 from keras.optimizers import SGD,RMSprop,adam
 from keras.utils import np_utils
 
-# We require this for Theano lib ONLY. Remove it for TensorFlow usage
 from keras import backend as K
-K.set_image_dim_ordering('th')
+if K.backend() == 'tensorflow':
+    import tensorflow
+    #K.set_image_dim_ordering('tf')
+else:
+    import theano
+    #K.set_image_dim_ordering('th')
 
+'''Ideally we should have changed image dim ordering based on Theano or Tensorflow, but for some reason I get following error when I switch it to 'tf' for Tensorflow.
+	However, the outcome of the prediction doesnt seem to get affected due to this and Tensorflow gives me similar result as Theano.
+	I didnt spend much time on this behavior, but if someone has answer to this then please do comment and let me know.
+    ValueError: Negative dimension size caused by subtracting 3 from 1 for 'conv2d_1/convolution' (op: 'Conv2D') with input shapes: [?,1,200,200], [3,3,200,32].
+'''
+K.set_image_dim_ordering('th')
+	
+	
 import numpy as np
 #import matplotlib.pyplot as plt
 import os
-import theano
+
 from PIL import Image
 # SKLEARN
 from sklearn.utils import shuffle
@@ -30,7 +42,6 @@ import cv2
 import matplotlib
 #matplotlib.use("TkAgg")
 from matplotlib import pyplot as plt
-
 
 # input image dimensions
 img_rows, img_cols = 200, 200
@@ -71,6 +82,29 @@ WeightFileName = ["ori_4015imgs_weights.hdf5","bw_4015imgs_weights.hdf5","bw_251
 # outputs
 output = ["OK", "NOTHING","PEACE", "PUNCH", "STOP"]
 #output = ["PEACE", "STOP", "THUMBSDOWN", "THUMBSUP"]
+
+jsonarray = {}
+
+#%%
+def update(plot):
+    global jsonarray
+    h = 450
+    y = 30
+    w = 45
+    font = cv2.FONT_HERSHEY_SIMPLEX
+
+    #plot = np.zeros((512,512,3), np.uint8)
+    
+    #array = {"OK": 65.79261422157288, "NOTHING": 0.7953541353344917, "PEACE": 5.33270463347435, "PUNCH": 0.038031660369597375, "STOP": 28.04129719734192}
+    
+    for items in jsonarray:
+        mul = (jsonarray[items]) / 100
+        #mul = random.randint(1,100) / 100
+        cv2.line(plot,(0,y),(int(h * mul),y),(255,0,0),w)
+        cv2.putText(plot,items,(0,y+5), font , 0.7,(0,255,0),2,1)
+        y = y + w + 30
+
+    return plot
 
 
 
@@ -163,14 +197,14 @@ def loadCNN(wf_index):
     # Model conig details
     model.get_config()
     
-    from keras.utils import plot_model
-    plot_model(model, to_file='new_model.png', show_shapes = True)
+    #from keras.utils import plot_model
+    #plot_model(model, to_file='new_model.png', show_shapes = True)
     
 
     if wf_index >= 0:
         #Load pretrained weights
         fname = WeightFileName[int(wf_index)]
-        print "loading ", fname
+        print("loading ", fname)
         model.load_weights(fname)
     
     layer = model.layers[11]
@@ -181,7 +215,7 @@ def loadCNN(wf_index):
 
 # This function does the guessing work based on input images
 def guessGesture(model, img):
-    global output, get_output
+    global output, get_output, jsonarray
     #Load image and flatten it
     image = np.array(img).flatten()
     
@@ -214,19 +248,20 @@ def guessGesture(model, img):
     # Get the output with maximum probability
     import operator
     
-    guess = max(d.iteritems(), key=operator.itemgetter(1))[0]
+    guess = max(d.items(), key=operator.itemgetter(1))[0]
     prob  = d[guess]
 
-    if prob > 70.0:
-        #print guess + "  Probability: ", prob
+    if prob > 60.0:
+        #print(guess + "  Probability: ", prob)
 
         #Enable this to save the predictions in a json file,
         #Which can be read by plotter app to plot bar graph
         #dump to the JSON contents to the file
         
-        with open('gesturejson.txt', 'w') as outfile:
-            json.dump(d, outfile)
-
+        #with open('gesturejson.txt', 'w') as outfile:
+        #    json.dump(d, outfile)
+        jsonarray = d
+                
         return output.index(guess)
 
     else:
@@ -248,9 +283,9 @@ def initializers():
     
 
     
-    print immatrix.shape
+    print(immatrix.shape)
     
-    raw_input("Press any key")
+    input("Press any key")
     
     #########################################################
     ## Label the set of images per respective gesture type.
@@ -258,7 +293,7 @@ def initializers():
     label=np.ones((total_images,),dtype = int)
     
     samples_per_class = total_images / nb_classes
-    print "samples_per_class - ",samples_per_class
+    print("samples_per_class - ",samples_per_class)
     s = 0
     r = samples_per_class
     for classIndex in range(nb_classes):
@@ -312,9 +347,9 @@ def trainModel(model):
 
     visualizeHis(hist)
 
-    ans = raw_input("Do you want to save the trained weights - y/n ?")
+    ans = input("Do you want to save the trained weights - y/n ?")
     if ans == 'y':
-        filename = raw_input("Enter file name - ")
+        filename = input("Enter file name - ")
         fname = path + str(filename) + ".hdf5"
         model.save_weights(fname,overwrite=True)
     else:
@@ -394,7 +429,7 @@ def visualizeLayers(model, img, layerIndex):
         visualizeLayer(model,img,input_image, layerIndex)
     else:
         tlayers = len(model.layers[:])
-        print "Total layers - {}".format(tlayers)
+        print("Total layers - {}".format(tlayers))
         for i in range(1,tlayers):
              visualizeLayer(model,img, input_image,i)
 
@@ -414,7 +449,7 @@ def visualizeLayer(model, img, input_image, layerIndex):
         o1 = np.rollaxis(output_image, 3, 1)
         output_image = np.rollaxis(o1, 3, 1)
         
-        print "Dumping filter data of layer{} - {}".format(layerIndex,layer.__class__.__name__)
+        print("Dumping filter data of layer{} - {}".format(layerIndex,layer.__class__.__name__))
         filters = len(output_image[0,0,0,:])
         
         fig=plt.figure(figsize=(8,8))
@@ -432,6 +467,6 @@ def visualizeLayer(model, img, input_image, layerIndex):
         fig.savefig("img_" + str(img) + "_layer" + str(layerIndex)+"_"+layer.__class__.__name__+".png")
         #plt.close(fig)
     else:
-        print "Can't dump data of this layer{}- {}".format(layerIndex, layer.__class__.__name__)
+        print("Can't dump data of this layer{}- {}".format(layerIndex, layer.__class__.__name__))
 
 
