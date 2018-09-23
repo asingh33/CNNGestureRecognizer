@@ -18,7 +18,7 @@ I have uploaded few more changes to this repo -
 - Added TensorFlow support, as Theano's development has been stopped.
 - Added a new background subtraction filter, which is by far the best performing filter for this project
 - Added lots of performance improving changes. There is now literally no FPS drop when prediction mode is enabled
-- An ina-pp graph plotting has been added to observe the probability of the gesture predictions 
+- An in-app graph plotting has been added to observe the probability of the gesture predictions 
  
 # Repo contents
 - **trackgesture.py** : The main script launcher. This file contains all the code for UI options and OpenCV code to capture camera contents. This script internally calls interfaces to gestureCNN.py.
