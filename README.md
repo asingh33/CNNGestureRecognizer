@@ -4,14 +4,22 @@ Gesture recognition via CNN neural network implemented in Keras + Theano + OpenC
 
 
 Key Requirements:
-Python 2.7.13
-OpenCV 2.4.8
+Python 3.6.1
+OpenCV 3.4.1
 Keras 2.0.2
+Tensorflow 1.2.1
 Theano 0.9.0
 
 Suggestion: Better to download Anaconda as it will take care of most of the other packages and easier to setup a virtual workspace to work with multiple versions of key packages like python, opencv etc.
 
-
+# New changes
+I have uploaded few more changes to this repo -
+- Project is Python3 compatible now.
+- Added TensorFlow support, as Theano's development has been stopped.
+- Added a new background subtraction filter, which is by far the best performing filter for this project
+- Added lots of performance improving changes. There is now literally no FPS drop when prediction mode is enabled
+- An ina-pp graph plotting has been added to observe the probability of the gesture predictions 
+ 
 # Repo contents
 - **trackgesture.py** : The main script launcher. This file contains all the code for UI options and OpenCV code to capture camera contents. This script internally calls interfaces to gestureCNN.py.
 - **gestureCNN.py** : This script file holds all the CNN specific code to create CNN model, load the weight file (if model is pretrained), train the model using image samples present in **./imgfolder_b**, visualize the feature maps at different layers of NN (of pretrained model) for a given input image present in **./imgs** folder.
