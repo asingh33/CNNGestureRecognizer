@@ -30,9 +30,18 @@ I have uploaded few more changes to this repo -
 - **_ori_4015imgs_loss.png_** : This is just a pic of a plot depicting model loss Vs validation loss after I training.
 
 # Usage
+**On Mac**
 ```bash
+eg: With Theano as backend
 $ KERAS_BACKEND=theano python trackgesture.py 
 ```
+**On Windows**
+```bash
+eg: With Tensorflow as backend
+> set "KERAS_BACKEND=tensorflow"
+> python trackgesture.py 
+```
+
 We are setting KERAS_BACKEND to change backend to Theano, so in case you have already done it via Keras.json then no need to do that. But if you have Tensorflow set as default then this will be required.
 
 # Features
