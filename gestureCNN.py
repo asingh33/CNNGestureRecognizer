@@ -292,7 +292,7 @@ def initializers():
     ##
     label=np.ones((total_images,),dtype = int)
     
-    samples_per_class = total_images / nb_classes
+    samples_per_class = int(total_images / nb_classes)
     print("samples_per_class - ",samples_per_class)
     s = 0
     r = samples_per_class
