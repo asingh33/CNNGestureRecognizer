@@ -26,8 +26,6 @@ saveImg = False
 guessGesture = False
 visualize = False
 
-lastgesture = -1
-
 kernel = np.ones((15,15),np.uint8)
 kernel2 = np.ones((1,1),np.uint8)
 skinkernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(5,5))
@@ -71,7 +69,7 @@ def saveROIImg(img):
 
 #%%
 def skinMask(frame, x0, y0, width, height, framecount, plot):
-    global guessGesture, visualize, mod, lastgesture, saveImg
+    global guessGesture, visualize, mod, saveImg
     # HSV values
     low_range = np.array([0, 50, 80])
     upper_range = np.array([30, 200, 255])
@@ -113,7 +111,7 @@ def skinMask(frame, x0, y0, width, height, framecount, plot):
 
 #%%
 def binaryMask(frame, x0, y0, width, height, framecount, plot ):
-    global guessGesture, visualize, mod, lastgesture, saveImg
+    global guessGesture, visualize, mod, saveImg
     
     cv2.rectangle(frame, (x0,y0),(x0+width,y0+height),(0,255,0),1)
     #roi = cv2.UMat(frame[y0:y0+height, x0:x0+width])
@@ -146,7 +144,7 @@ def binaryMask(frame, x0, y0, width, height, framecount, plot ):
 # and then press 'x' key. If you can see the contents of ROI window all blank then it means you are
 # good to go for gesture prediction
 def bkgrndSubMask(frame, x0, y0, width, height, framecount, plot):
-    global guessGesture, takebkgrndSubMask, visualize, mod, bkgrnd, lastgesture, saveImg
+    global guessGesture, takebkgrndSubMask, visualize, mod, bkgrnd, saveImg
         
     cv2.rectangle(frame, (x0,y0),(x0+width,y0+height),(0,255,0),1)
     roi = frame[y0:y0+height, x0:x0+width]
@@ -204,25 +202,21 @@ def Main():
     #Call CNN model loading callback
     while True:
         ans = int(input( banner))
-        if ans == 2:
-            mod = myNN.loadCNN(-1)
+        if ans == 1:
+            mod = myNN.loadCNN()
+            break
+        elif ans == 2:
+            mod = myNN.loadCNN()
             myNN.trainModel(mod)
             input("Press any key to continue")
             break
-        elif ans == 1:
-            print("Will load default weight file")
-            mod = myNN.loadCNN(0)
-            break
         elif ans == 3:
             if not mod:
-                w = int(input("Which weight file to load (0 or 1)"))
-                mod = myNN.loadCNN(w)
+                mod = myNN.loadCNN()
             else:
                 print("Will load default weight file")
             
-            img = int(input("Image number "))
-            layer = int(input("Enter which layer to visualize "))
-            myNN.visualizeLayers(mod, img, layer)
+            myNN.visualizeLayers(mod)
             input("Press any key to continue")
             continue
         
@@ -309,7 +303,7 @@ def Main():
             else:
                 print("SkinMask filter active")
         
-		## Use g key to start gesture predictions via CNN
+	## Use x key to use and refresh Background SubMask filter
         elif key == ord('x'):
             takebkgrndSubMask = True
             bkgrndSubMode = True

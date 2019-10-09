@@ -77,7 +77,7 @@ path1 = "./gestures"    #path of folder of images
 ## Path2 is the folder which is fed in to training model
 path2 = './imgfolder_b'
 
-WeightFileName = ["ori_4015imgs_weights.hdf5","bw_4015imgs_weights.hdf5","bw_2510imgs_weights.hdf5","./bw_weight.hdf5","./final_c_weights.hdf5","./semiVgg_1_weights.hdf5","/new_wt_dropout20.hdf5","./weights-CNN-gesture_skinmask.hdf5"]
+WeightFileName = []
 
 # outputs
 output = ["OK", "NOTHING","PEACE", "PUNCH", "STOP"]
@@ -106,7 +106,10 @@ def update(plot):
 
     return plot
 
-
+#%% For debug trace
+def debugme():
+    import pdb
+    pdb.set_trace()
 
 #%%
 # This function can be used for converting colored img to Grayscale img
@@ -122,19 +125,24 @@ def convertToGrayImg(path1, path2):
         grayimg.save(path2 + '/' +  file, "PNG")
 
 #%%
-def modlistdir(path):
+def modlistdir(path, pattern = None):
     listing = os.listdir(path)
     retlist = []
     for name in listing:
         #This check is to ignore any hidden files/folders
-        if name.startswith('.'):
-            continue
-        retlist.append(name)
+        if pattern == None:
+            if name.startswith('.'):
+                continue
+            else:
+                retlist.append(name)
+        elif name.endswith(pattern):
+            retlist.append(name)
+            
     return retlist
 
 
 # Load CNN model
-def loadCNN(wf_index):
+def loadCNN():
     global get_output
     model = Sequential()
     
@@ -157,56 +165,28 @@ def loadCNN(wf_index):
     model.add(Dense(nb_classes))
     model.add(Activation('softmax'))
     
-    '''
-    
-    model.add(ZeroPadding2D((1,1),input_shape=(img_channels, img_rows, img_cols)))
-    model.add(Conv2D(nb_filters , (nb_conv, nb_conv), activation='relu'))
-    #model.add(ZeroPadding2D((1,1)))
-    #model.add(Conv2D(nb_filters , (nb_conv, nb_conv), activation='relu'))
-    model.add(MaxPooling2D(pool_size=(nb_pool, nb_pool)))
-    model.add(Dropout(0.2))
-    
-    #model.add(ZeroPadding2D((1,1)))
-    model.add(Conv2D(nb_filters , (nb_conv, nb_conv), activation='relu'))
-    #model.add(ZeroPadding2D((1,1)))
-    model.add(MaxPooling2D(pool_size=(nb_pool, nb_pool)))
-    ##
-    #model.add(Conv2D(nb_filters , (nb_conv, nb_conv), activation='relu'))
-    #model.add(MaxPooling2D(pool_size=(nb_pool, nb_pool), strides=(2,2)))
-    
-    model.add(Dropout(0.3))
-    model.add(Flatten())
-    ###
-    #model.add(Dense(128))
-    #model.add(Activation('relu'))
-    #model.add(Dropout(0.5))
-
-    model.add(Dense(256))
-    model.add(Activation('relu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(nb_classes))
-    model.add(Activation('softmax'))
-    '''
-    
     #sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
     model.compile(loss='categorical_crossentropy', optimizer='adadelta', metrics=['accuracy'])
-    
     
     # Model summary
     model.summary()
     # Model conig details
     model.get_config()
     
-    #from keras.utils import plot_model
-    #plot_model(model, to_file='new_model.png', show_shapes = True)
     
+    #List all the weight files available in current directory
+    WeightFileName = modlistdir('.','.hdf5')
+    if len(WeightFileName) == 0:
+        print('Error: No pretrained weight file found. Please either train the model or download one from the https://github.com/asingh33/CNNGestureRecognizer')
+        return 0
+    else:
+        print('Found these weight files - {}'.format(WeightFileName))
+    #Load pretrained weights
+    w = int(input("Which weight file to load (enter the INDEX of it, which starts from 0): "))
+    fname = WeightFileName[int(w)]
+    print("loading ", fname)
+    model.load_weights(fname)
 
-    if wf_index >= 0:
-        #Load pretrained weights
-        fname = WeightFileName[int(wf_index)]
-        print("loading ", fname)
-        model.load_weights(fname)
-    
     layer = model.layers[11]
     get_output = K.function([model.layers[0].input, K.learning_phase()], [layer.output,])
     
@@ -265,6 +245,7 @@ def guessGesture(model, img):
         return output.index(guess)
 
     else:
+        # Lets return index 1 for 'Nothing' 
         return 1
 
 #%%
@@ -391,14 +372,23 @@ def visualizeHis(hist):
     plt.show()
 
 #%%
-def visualizeLayers(model, img, layerIndex):
+def visualizeLayers(model):
     imlist = modlistdir('./imgs')
+    if len(imlist) == 0:
+        print('Error: No sample image file found under \'./imgs\' folder.')
+        return
+    else:
+        print('Found these sample image files - {}'.format(imlist))
+
+    img = int(input("Which sample image file to load (enter the INDEX of it, which starts from 0): "))
+    layerIndex = int(input("Enter which layer to visualize. Enter -1 to visualize all layers possible: "))
+    
     if img <= len(imlist):
         
-        image = np.array(Image.open('./imgs/' + imlist[img - 1]).convert('L')).flatten()
+        image = np.array(Image.open('./imgs/' + imlist[img]).convert('L')).flatten()
         
         ## Predict
-        guessGesture(model,image)
+        print('Guessed Gesture is {}'.format(output[guessGesture(model,image)]))
         
         # reshape it
         image = image.reshape(img_channels, img_rows,img_cols)
@@ -412,10 +402,8 @@ def visualizeLayers(model, img, layerIndex):
         # reshape for NN
         input_image = image.reshape(1, img_channels, img_rows, img_cols)
     else:
-        X_train, X_test, Y_train, Y_test = initializers()
-        
-        # the input image
-        input_image = X_test[:img+1]
+        print('Wrong file index entered !!')
+        return
     
     
     
@@ -446,8 +434,9 @@ def visualizeLayer(model, img, input_image, layerIndex):
     ## If 4 dimensional then take the last dimension value as it would be no of filters
     if output_image.ndim == 4:
         # Rearrange dimension so we can plot the result
-        o1 = np.rollaxis(output_image, 3, 1)
-        output_image = np.rollaxis(o1, 3, 1)
+        #o1 = np.rollaxis(output_image, 3, 1)
+        #output_image = np.rollaxis(o1, 3, 1)
+        output_image = np.moveaxis(output_image, 1, 3)
         
         print("Dumping filter data of layer{} - {}".format(layerIndex,layer.__class__.__name__))
         filters = len(output_image[0,0,0,:])
@@ -464,7 +453,9 @@ def visualizeLayer(model, img, input_image, layerIndex):
             plt.yticks(np.array([]))
         plt.tight_layout()
         #plt.show()
-        fig.savefig("img_" + str(img) + "_layer" + str(layerIndex)+"_"+layer.__class__.__name__+".png")
+        savedfilename = "img_" + str(img) + "_layer" + str(layerIndex)+"_"+layer.__class__.__name__+".png"
+        fig.savefig(savedfilename)
+        print("Create file - {}".format(savedfilename))
         #plt.close(fig)
     else:
         print("Can't dump data of this layer{}- {}".format(layerIndex, layer.__class__.__name__))
