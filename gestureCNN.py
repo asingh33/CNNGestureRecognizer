@@ -25,7 +25,8 @@ else:
 	I didnt spend much time on this behavior, but if someone has answer to this then please do comment and let me know.
     ValueError: Negative dimension size caused by subtracting 3 from 1 for 'conv2d_1/convolution' (op: 'Conv2D') with input shapes: [?,1,200,200], [3,3,200,32].
 '''
-K.set_image_dim_ordering('th')
+#K.set_image_dim_ordering('th')
+K.set_image_data_format('channels_first')
 	
 	
 import numpy as np
@@ -217,8 +218,7 @@ def guessGesture(model, img):
     #prob_array = model.predict_proba(rimage)
     
     prob_array = get_output([rimage, 0])[0]
-    
-    #print prob_array
+    #print('prob_array: ',prob_array)
     
     d = {}
     i = 0
@@ -327,8 +327,6 @@ def trainModel(model):
     hist = model.fit(X_train, Y_train, batch_size=batch_size, epochs=nb_epoch,
                  verbose=1, validation_split=0.2)
 
-    visualizeHis(hist)
-
     ans = input("Do you want to save the trained weights - y/n ?")
     if ans == 'y':
         filename = input("Enter file name - ")
@@ -336,6 +334,8 @@ def trainModel(model):
         model.save_weights(fname,overwrite=True)
     else:
         model.save_weights("newWeight.hdf5",overwrite=True)
+        
+    visualizeHis(hist)
 
     # Save model as well
     # model.save("newModel.hdf5")
@@ -343,11 +343,18 @@ def trainModel(model):
 
 def visualizeHis(hist):
     # visualizing losses and accuracy
-
+    keylist = hist.history.keys()
+    #print(hist.history.keys())
     train_loss=hist.history['loss']
     val_loss=hist.history['val_loss']
-    train_acc=hist.history['acc']
-    val_acc=hist.history['val_acc']
+    
+    #Tensorflow new updates seem to have different key name
+    if 'acc' in keylist:
+        train_acc=hist.history['acc']
+        val_acc=hist.history['val_acc']
+    else:
+        train_acc=hist.history['accuracy']
+        val_acc=hist.history['val_accuracy']
     xc=range(nb_epoch)
 
     plt.figure(1,figsize=(7,5))
