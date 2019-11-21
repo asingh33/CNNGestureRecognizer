@@ -142,7 +142,7 @@ def modlistdir(path, pattern = None):
 
 
 # Load CNN model
-def loadCNN():
+def loadCNN(bTraining = False):
     global get_output
     model = Sequential()
     
@@ -173,21 +173,22 @@ def loadCNN():
     # Model conig details
     model.get_config()
     
-    
-    #List all the weight files available in current directory
-    WeightFileName = modlistdir('.','.hdf5')
-    if len(WeightFileName) == 0:
-        print('Error: No pretrained weight file found. Please either train the model or download one from the https://github.com/asingh33/CNNGestureRecognizer')
-        return 0
-    else:
-        print('Found these weight files - {}'.format(WeightFileName))
-    #Load pretrained weights
-    w = int(input("Which weight file to load (enter the INDEX of it, which starts from 0): "))
-    fname = WeightFileName[int(w)]
-    print("loading ", fname)
-    model.load_weights(fname)
+    if not bTraining :
+        #List all the weight files available in current directory
+        WeightFileName = modlistdir('.','.hdf5')
+        if len(WeightFileName) == 0:
+            print('Error: No pretrained weight file found. Please either train the model or download one from the https://github.com/asingh33/CNNGestureRecognizer')
+            return 0
+        else:
+            print('Found these weight files - {}'.format(WeightFileName))
+        #Load pretrained weights
+        w = int(input("Which weight file to load (enter the INDEX of it, which starts from 0): "))
+        fname = WeightFileName[int(w)]
+        print("loading ", fname)
+        model.load_weights(fname)
 
-    layer = model.layers[11]
+    # refer the last layer here
+    layer = model.layers[-1]
     get_output = K.function([model.layers[0].input, K.learning_phase()], [layer.output,])
     
     

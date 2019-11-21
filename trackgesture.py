@@ -206,7 +206,7 @@ def Main():
             mod = myNN.loadCNN()
             break
         elif ans == 2:
-            mod = myNN.loadCNN()
+            mod = myNN.loadCNN(True)
             myNN.trainModel(mod)
             input("Press any key to continue")
             break
