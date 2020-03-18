@@ -1,3 +1,11 @@
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/V7V01IK53)
+
+If you find my work useful, then please do consider supporting me. This will help me motivated and do more of such projects. 
+Thanks !
+
+
+
+
 [![DOI](https://zenodo.org/badge/89872749.svg)](https://zenodo.org/badge/latestdoi/89872749)
 # CNNGestureRecognizer
 Gesture recognition via CNN neural network implemented in Keras + Theano + OpenCV
@@ -234,7 +242,7 @@ Watch full video - https://www.youtube.com/watch?v=lnFPvtCSsLA&t=49s
 
 # In case you want to cite my work
 Abhishek Singh,”asingh33/CNNGestureRecognizer: CNNGestureRecognizer (Version 1.3.0)”, Zenodo. http://doi.org/10.5281/zenodo.1064825, Nov. 2017.  
-
+Do tell me how you used this work in your project. Would love to see your work. Good Luck!
 
 
 
