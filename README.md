@@ -16,7 +16,7 @@ Python 3.6.1
 OpenCV 3.4.1
 Keras 2.0.2
 Tensorflow 1.2.1
-Theano 0.9.0
+Theano 0.9.0   (obsolete and not supported any further)
 
 Suggestion: Better to download Anaconda as it will take care of most of the other packages and easier to setup a virtual workspace to work with multiple versions of key packages like python, opencv etc.
 
@@ -45,7 +45,7 @@ I have uploaded few more changes to this repo -
 **On Mac**
 ```bash
 eg: With Theano as backend
-$ KERAS_BACKEND=theano python trackgesture.py 
+$ KERAS_BACKEND=tensorflow python trackgesture.py 
 ```
 **On Windows**
 ```bash
