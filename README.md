@@ -1,6 +1,7 @@
-[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/V7V01IK53)
 
-If you find my work useful, then please do consider supporting me. This will help me keep motivated and do more of such projects. 
+Hey there reader,
+
+If you find my work useful and you have implemented something based on this project, then please do share about your project on my email. This will motivate me. 
 Thanks !
 
 
