@@ -248,7 +248,7 @@ Do tell me how you used this work in your project. Would love to see your work. 
 
 
 Dont forget to check out my other github project where I used this framework and applied SuperVised machine learning technique to train the Chrome Browser's TRex character :)
-https://github.com/asingh33/SupervisedChromeTrex
+https://techkblog.com/teach-an-ai-to-play-game-using-supervised-learning/
 Youtube link - https://youtu.be/ZZgvklkQrss
 
 ![](https://j.gifs.com/DRg4mn.gif)
