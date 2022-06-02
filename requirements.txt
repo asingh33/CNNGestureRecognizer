@@ -6,7 +6,7 @@ cycler==0.10.0
 gast==0.2.2
 grpcio==1.20.0
 h5py==2.9.0
-html5lib==0.9999999
+html5lib==0.99999999
 Keras==2.2.4
 Keras-Applications>=1.0.8
 Keras-Preprocessing==1.0.9
