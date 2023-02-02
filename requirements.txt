@@ -32,4 +32,4 @@ tensorboard<1.16.0
 tensorflow==1.15.4
 tensorflow-estimator==1.15.1
 termcolor==1.1.0
-werkzeug==0.15.3
+werkzeug==0.15.5
