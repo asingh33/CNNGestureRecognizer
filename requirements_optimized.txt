@@ -1,0 +1,31 @@
+# Core ML/DL frameworks - Modern versions
+tensorflow>=2.11.0
+numpy>=1.21.0
+
+# Computer Vision
+opencv-python>=4.8.0
+
+# Data processing & utilities
+scikit-learn>=1.2.0
+scipy>=1.9.0
+Pillow>=9.5.0
+matplotlib>=3.6.0
+python-dateutil>=2.8.2
+PyYAML>=6.0
+
+# Testing frameworks
+pytest>=7.3.0
+pytest-cov>=4.1.0
+pytest-xdist>=3.2.0
+pytest-benchmark>=4.0.0
+
+# Code quality & performance
+black>=23.0.0
+flake8>=6.0.0
+pylint>=2.17.0
+mypy>=1.0.0
+py-spy>=0.3.14
+
+# Production optimization
+onnx>=1.14.0
+onnxruntime>=1.14.0
